@@ -203,7 +203,15 @@ class tasks:
         
         if 'detail' in input_dic:
             if(len(input_dic['detail']) > 0):
-                detail = string.atoi(input_dic['detail'][0])        
+                try:
+                    detail = string.atoi(input_dic['detail'][0])
+                except:
+                    self.response += 'unsupport detail: [%s], only num [0, 1], default detail=0\n' % (input_dic['detail'][0])      
+                    detail = 0               
+        #self.response += 'detail: %d\n' % (detail)            
+        if(detail <0) or (detail > 1):
+            self.response += 'detail out of range: [%d], only [0, 1], default detail=0\n' % (detail)
+            detail = 0   
            
         self.get_ms_tasks()
         self.get_disk_files()
@@ -257,9 +265,7 @@ class tasks:
                 self.response += str(one_file.task_num)
                 self.response += ':'
                 self.response += one_file.task_list
-                self.response += '\n'
-        else:
-            self.response += 'unsupport detail: %d\n' % (detail)         
+                self.response += '\n'               
                   
         #request.write(self.response)
         if 0==result:

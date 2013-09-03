@@ -564,12 +564,18 @@ class check:
         try: 
             #output_dic=request.args
             #print 'output_dic:\n',output_dic
-            #request.write(str(output_dic))
             if 'detail' in input_dic:
                 if(len(input_dic['detail']) > 0):
-                    detail = string.atoi(input_dic['detail'][0])               
-            #self.response += 'detail: %d\n' % (detail)
-            
+                    try:
+                        detail = string.atoi(input_dic['detail'][0])
+                    except:
+                        self.response += 'unsupport detail: [%s], only num [0, 1, 2], default detail=0\n' % (input_dic['detail'][0])      
+                        detail = 0               
+            #self.response += 'detail: %d\n' % (detail)            
+            if(detail <0) or (detail > 2):
+                self.response += 'detail out of range: [%d], only [0, 1, 2], default detail=0\n' % (detail)
+                detail = 0
+                
             for i in range(0, len(self.items), 1):
                 self.check_item(self.items[i])
                 
@@ -669,9 +675,7 @@ class check:
                         self.response += '<br>'
                     self.response += '</td>'
                     self.response += '</tr>'
-                self.response += '</table>\n'
-            else:
-                self.response += 'unsupport detail: %d\n' % (detail)      
+                self.response += '</table>\n'  
                 
             #request.write(self.response)
         except:

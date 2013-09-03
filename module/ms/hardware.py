@@ -65,7 +65,15 @@ class hardware:
         
         if 'detail' in input_dic:
             if(len(input_dic['detail']) > 0):
-                detail = string.atoi(input_dic['detail'][0])
+                try:
+                    detail = string.atoi(input_dic['detail'][0])
+                except:
+                    self.response += 'unsupport detail: [%s], only num [0, 1, 2], default detail=0\n' % (input_dic['detail'][0])      
+                    detail = 0               
+        #self.response += 'detail: %d\n' % (detail)            
+        if(detail <0) or (detail > 2):
+            self.response += 'detail out of range: [%d], only [0, 1, 2], default detail=0\n' % (detail)
+            detail = 0
                 
         for item in self.items:
             self.check_item(item)
@@ -131,9 +139,7 @@ class hardware:
                 self.response += '</td>'
                 self.response += '</tr>'
             self.response += '</table>'
-        else:
-            self.response += 'unsupport detail: %d\n' % (detail)   
-        
+               
         #request.write(self.response)        
         if 0==result:
             return (result, self.response)
